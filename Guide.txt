@@ -1,0 +1,40 @@
+tekst:
+    "Załóżmy, że Jan chce wysłać przez Internet wiadomość W do Anny. Z różnych powodów musi podzielić
+    ją na n pakietów. Każdemu pakietowi nadaje kolejne numery i wysyła przez sieć. Komputer Anny po otrzymaniu przesłanych 
+    pakietów musi poskładać je w całą wiadomość, ponieważ mogą one przychodzić w losowej
+    kolejności. Państwa zadaniem jest zaprojektowanie i zaimplementowanie odpowiedniego rozwiązania radzącego sobie z tym problemem. 
+    Należy wybrać i zaimplementować zgodnie z danym dla wybranej struktury ADT oraz
+    przeanalizować czas działania - złożoność obliczeniową proponowanego rozwiązania."
+
+Kroki działania i projektu programu:
+    1.1. Zaprojektuj klasę "Osoba" posiadającą metodę dzięki której po jej wywołaniu zostanie wysłana dana wiadomość do danej instancji tej samej klasy.
+    Metoda ta otrzyma bądź wygeneruje wiadomość (wiadomość będzie albo zadana przy wywołaniu funkcji, albo podana będzie ilość znaków i zostanie wygenerowana
+    losowa wiadomość z losowych znaków), a następnie wygenerowaną wiadomość potnie i przekaże do Anny. 
+    1.2. Podawanie wiadomośći z Jana do Anny może wyglądać tak: Jan generuje wiadomość, Jan ją tnie i miesza, kawałki tej wiadomości zapisuje do pliku txt w formie 
+    każdego pakietu w innej linijce. Anna następnie czyta po jedym pakiecie (linijce), tworzy z niego nowy wskaźnik na (String albo Cstring), wskaźnik
+    na nowy element wkłada do kolejki, po włożeniu wszystkich elementów do kolejki pryjorytetowej elementy wyjmowane są 1 po 1.
+    Ad 1.2. Ewentualnie, i chyba będzie to lepsze rozwiązanie, zamiast pisać do pliku txt
+    (gdzie w jednej linijce musiała by sie znaleźć treść pakietu i jej pryjorytet):
+        1. Jan w taki czy inny sposób dostaje bądź generuje tekst do wysłania Annie
+        2. String o długości L jest cięty na n kawałków, każdy o długości maximum L/n (ostatni kawałek może mieć inna długość niż L/n).
+        3. Tworzymy zwykła tablice na wskaźniki na Strukturę* o długości odpowiadającej ilości pakietów. Każde miejsce w tablicy będzie zainicjalizowane taką
+        wartością, aby ta wartość była inna od każdego możliwego w tym zadaniu wskaźnika (jakiś null czy coś).
+        4. dla każdego kawałka tworzymy nowy wskaźnik na string (albo jakiś odpowiednik) zawierający ten że pakiet. Ten wskaźnik przekazujemy
+        do tablicy na losowe i niezajęte miejsce. Nie musimy dosłownie ciąć i wkładać tej wiadomości we wskaźniki czy do tablicy, wystarczy ze stringi, 
+        do kótrych stworzyliśmy wskaźniki będą posiadały kopie słowa/pakietu/ciągu znaków. Oryginalny string może być nie zmieniony w ogóle.
+        5. Tak wygenerowana tablica, bądź wskaźnik do niej, zostaje przekazana do Anny (inna instancja tej samej klasy "Osoba"). W sumie to logiczniej
+        przekazać całą tablice, gdyż bardziej odpowiada to symulowanej tutaj sytuacji.
+        6. Anna, gdy już dostanie całą tablice/wskaźnik do niej, wkłada po jednym pakiecie z tej listy do kolejki pryjorytetowej.
+        7. Odpowiednio zaimplementwana kolejka pryjorytetowa (max heap) automatycznie posortuje nam te elementy.
+        8. Jakaś metoda Anny wyjmuje ze szczytu kolejki wyrazy o najwyższym pryjorytecie (są to nadal wskaźniki na string)
+        9. Adresy tych stringów są z osobna dereferowane i dodawane do stringu będącego gotową i posortowaną wiadomością.
+
+
+Schemat opisanej powyżej Struktury:
+
+template <class generic>
+Class pakiet
+{
+    generic packet;
+    int priority;
+};
