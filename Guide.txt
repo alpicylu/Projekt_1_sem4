@@ -19,22 +19,29 @@ Kroki działania i projektu programu:
         2. String o długości L jest cięty na n kawałków, każdy o długości maximum L/n (ostatni kawałek może mieć inna długość niż L/n).
         3. Tworzymy zwykła tablice na wskaźniki na Strukturę* o długości odpowiadającej ilości pakietów. Każde miejsce w tablicy będzie zainicjalizowane taką
         wartością, aby ta wartość była inna od każdego możliwego w tym zadaniu wskaźnika (jakiś null czy coś).
-        4. dla każdego kawałka tworzymy nowy wskaźnik na string (albo jakiś odpowiednik) zawierający ten że pakiet. Ten wskaźnik przekazujemy
-        do tablicy na losowe i niezajęte miejsce. Nie musimy dosłownie ciąć i wkładać tej wiadomości we wskaźniki czy do tablicy, wystarczy ze stringi, 
-        do kótrych stworzyliśmy wskaźniki będą posiadały kopie słowa/pakietu/ciągu znaków. Oryginalny string może być nie zmieniony w ogóle.
+        4. dla każdego kawałka tworzymy nowy wskaźnik na Strukturę (albo jakiś odpowiednik) zawierający ten że pakiet. Ten wskaźnik przekazujemy
+        do tablicy na losowe i niezajęte miejsce. Nie musimy dosłownie ciąć i wkładać tej wiadomości we wskaźniki czy do tablicy, wystarczy ze Obiekty
+        Struktury, do kótrych stworzyliśmy wskaźniki będą posiadały kopie słowa/pakietu/ciągu znaków. Oryginalny string może być nie zmieniony w ogóle.
         5. Tak wygenerowana tablica, bądź wskaźnik do niej, zostaje przekazana do Anny (inna instancja tej samej klasy "Osoba"). W sumie to logiczniej
-        przekazać całą tablice, gdyż bardziej odpowiada to symulowanej tutaj sytuacji.
-        6. Anna, gdy już dostanie całą tablice/wskaźnik do niej, wkłada po jednym pakiecie z tej listy do kolejki pryjorytetowej.
+        przekazać całą tablice, gdyż bardziej odpowiada to symulowanej tutaj sytuacji).
+        6. Anna, gdy już dostanie całą tablice/wskaźnik do niej, wkłada po jednym pakiecie (instancji Struktury czy tam wskaźnik na nią)
+        z tej listy do kolejki pryjorytetowej.
         7. Odpowiednio zaimplementwana kolejka pryjorytetowa (max heap) automatycznie posortuje nam te elementy.
         8. Jakaś metoda Anny wyjmuje ze szczytu kolejki wyrazy o najwyższym pryjorytecie (są to nadal wskaźniki na string)
         9. Adresy tych stringów są z osobna dereferowane i dodawane do stringu będącego gotową i posortowaną wiadomością.
+    Ad 1.3. Lekka modyfikacja: aby nieco bardziej upodobnić kod do sytuacji rzeczywistej (przesyłanie wiadomośćci przez pakiety), lepiej by było, gdyby Jan
+        nie tworzył tablicy ze wskaźnikami na Pakiety, ale po prostu tablice pakietów - w tym wypadku ania dostawała by kopie/referencje/wskaźnik tablicy
+        (zalezy jak to zaimplementuje), zamiast tablicy ze wskaźnikami na pakiety, które siedziały by sobie w stałych miejscach w pamięci - jest to nieco bardziej
+        realistyczne biorąc kontekst zadania.
+        Natomiast, gdy Ania dostanie już kopie/referencje/itd tablicy, będzie robiła z Pakietów wskaźniki na pakiety, żeby MinHeap nie musiał żąglować całymi
+        stukturami, a tylko wskaźnikami na nie. Oczywiśćie, Heap bedzie musaił dereferować te wskaźniki zeby porównać pryjorytety, ale i tak gitara.
 
 
-Schemat opisanej powyżej Struktury:
+Decyzje, z kótrych będe musiał się tłumaczyć:
+1. dlaczego klasa Packet przechowuje treść zamiast wskaźnik do niej (generic content zamiast generic* content)
+    Większy realizm, w końcu mamy przekzać wiadomość. Mało realistyczne jakbyśmy przekazywali przez neta tylko wskaźniki, które wskazują na wartośći na innym
+    kompie.
 
-template <class generic>
-Class pakiet
-{
-    generic packet;
-    int priority;
-};
+2. Dlaczego heap jest na array a nie na liście jedno/dwu kierunkowej - bo mi sie nie chciało.
+
+3. Dlaczego klasy są zdefiniowane w headerach (bo template)

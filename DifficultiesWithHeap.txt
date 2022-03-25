@@ -1,0 +1,23 @@
+
+1. Ill probably implement the heap on an array, because i dont feel like playing with linked lists. But ill see how the on-array implementation
+performs, and if i will have enough time, i might do one on a LL
+
+2. The array in the MaxHeap will be done as follows:
+    - in the private sector, define a pointer to the array. This seems to be the best option that allows me to define the array size after program has started.
+
+3. If you are working on an array, you will need to expand the array once it reaches its capacity.
+
+4. My implementation of Minheap cant be generic - i nned it to be of type "Packet", since it will operate on those packets exclusively
+
+5. Add a functioanlity that allows for increasing the size of the Heap array - create a new, bigger array, copy elements into that new array, delete old array. 
+
+6. How to implement popping an element:
+    -copy the top to another variable
+    -put the last element at the top, replacing the previous top element. (delete the last elem / shrink heap_size by 1)
+    -compare the new top with its children. replace top with the smaller child
+    -repeat the operation from perspective of the child's index you just switched.
+
+7. Exceptions & error handling:
+    running out of array space
+    popping when empty
+    notice how instead of deleting elements at the end of the array after popping them fror instance, you just shrink the last index. Maybe fix that.
