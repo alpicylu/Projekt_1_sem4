@@ -37,6 +37,19 @@ Kroki działania i projektu programu:
         stukturami, a tylko wskaźnikami na nie. Oczywiśćie, Heap bedzie musaił dereferować te wskaźniki zeby porównać pryjorytety, ale i tak gitara.
 
 
+Jak zrobić klase Person, co ona ma robić
+    - Generować pociętą na pakiety wiadomość na podstawie zadanej w argumencie wiadomości (string)
+    - Generować pociętą na pakiety wiadomość na podstawie liczby znaków, jaką ta wiadomość ma zawierać. Wiadomością jest w tym przypadku losowy ciąg znaków
+    W ubu przypadkach rozmiar pakietu byłby stały, powiedzmy 5 znaków na pakiet (łącznie ze spacjami itd.)
+    - Pobierać pociętą wiadomość. W tym przypadku metoda odpowiedzialna za odbieranie wiadomości przyjmowała by zmienną będącą tablicą Packet'ow, nie tablicą wskaźników.
+    - Wysyłanie uprzednio wygenerowanej wiadomości do zadanego obiektu klas Person.
+
+Problemy:
+    you cant pass to a function an array by value, it needs to be a pointer or a reference, meaning that if you are not careful, the original array outside of the function may get
+    modified. So, just use const and/or make a copy of that passed array inside your runction
+
+
+
 Decyzje, z kótrych będe musiał się tłumaczyć:
 1. dlaczego klasa Packet przechowuje treść zamiast wskaźnik do niej (generic content zamiast generic* content)
     Większy realizm, w końcu mamy przekzać wiadomość. Mało realistyczne jakbyśmy przekazywali przez neta tylko wskaźniki, które wskazują na wartośći na innym
@@ -45,3 +58,8 @@ Decyzje, z kótrych będe musiał się tłumaczyć:
 2. Dlaczego heap jest na array a nie na liście jedno/dwu kierunkowej - bo mi sie nie chciało.
 
 3. Dlaczego klasy są zdefiniowane w headerach (bo template)
+
+4. Dlaczego wiadomość do wysłania jest atrybutem obiektu - dlatego, ze nie da sie zwyklej tablicy poskładać
+do funkcji przez kopie, a można tyklo przez referencje/wskaźnik. Jezeli da sie tylko przez wskaźnik, to znaczy,
+że ta oruginalna tablica musi gdzies istnieć, a jeżeli tak pomieszana tablica istnieje tylko wewnątrz funkcji
+to po zakończeniu ten funkcji tablica przestaje istnieć. Ponaddto chcę, żeby nadawca posiadał jakąś kopie wiadomośći.

@@ -38,6 +38,9 @@ public:
     /* Returns index of parent node. */
     int getParent(int i) { return (i-1)/2; }
 
+    /*Dodaje element pilnujac tym samym aby została zachowana własność sterty minimalnej - rodzic mniejszy od dziecka
+        IN:
+          const Packet<generic>& new_elem - referencja na obiekt typu Packet, który ma zostać dodany do sterty*/
     void addElem(const Packet<generic>& new_elem)
     {
         num_of_elements++;
@@ -65,7 +68,6 @@ public:
         else if (num_of_elements == 1) 
         {
             num_of_elements--;
-            std::cout << num_of_elements; 
             return *(ptr_to_array);
         }
 
@@ -73,7 +75,6 @@ public:
         *(ptr_to_array) = *(ptr_to_array + (num_of_elements-1) );  //Nadpisuje pierwszy element elementem, który jest ostatni w tablicy
         num_of_elements--; //"usuwa" ostatni element. W rzeczysistości skurcza o 1 zmienną śledzącą liczbe elementów. W praktyce ten wskaźnik nadal tam tkwi
         sortHeap(0);
-        std::cout << num_of_elements;  
         return top_copy; 
     }
 
@@ -89,7 +90,7 @@ public:
             if ( (*(ptr_to_array+parent_index))->getPriority() < (*(ptr_to_array+getLeft(parent_index)))->getPriority() &&
                  (*(ptr_to_array+parent_index))->getPriority() < (*(ptr_to_array+getRight(parent_index)))->getPriority() )
                  {
-                     std::cerr << "debug1 - sortHeap"; 
+                    //  std::cerr << "debug1 - sortHeap"; 
                      return; //subtree is sorted
                  }   
         }
@@ -118,7 +119,7 @@ public:
         //Rekurencyjne wywołanie tego samego algorytmu dla rodzica, którego zastąpiliśmy dzieckiem (rodzic przechodzi niżej, a dziecko wyżej)
         sortHeap(smallest_ind);
     }
-
+ 
     //                                            \/usun
     std::shared_ptr<Packet<generic>> getElem(int i=0) const
     {
@@ -126,7 +127,5 @@ public:
     }
 };
 
-/*
-copying constructor of packet
-*/
+
 #endif

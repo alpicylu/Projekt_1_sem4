@@ -13,6 +13,8 @@ private:
 
 public:
 
+    Packet() {}
+
     Packet(generic cntnt, int prty)
     {
         content = cntnt;

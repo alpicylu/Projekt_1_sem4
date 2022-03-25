@@ -1,40 +1,33 @@
 
+
+
 #include <iostream>
 #include <string>
 #include <memory>
 #include "packet.hh"
 #include "heap.hh"
+#include "person.hh"
 
+void Demonstration()
+{
+    using namespace std;
+    string demo_message = "Once upon a time in a kingdom far, far away, the king and queen were blessed with a beautiful baby girl.";
+
+    Person Jan("Jan", demo_message);
+    Person Anna("Anna");
+
+    Jan.sendMessage(Anna, true);
+    Anna.readMessage();
+}
 
 int main()
 {
     using namespace std;
+    
 
-    MinHeap<string> styrta(10);
-
-    styrta.addElem(Packet<string>("is", 4));
-    styrta.addElem(Packet<string>("unit", 2));
-    styrta.addElem(Packet<string>("grammatical", 1));
-    styrta.addElem(Packet<string>("A", 0));
-    styrta.addElem(Packet<string>("that", 3));
-    styrta.addElem(Packet<string>("syntaticly", 5));
-    styrta.addElem(Packet<string>("independent", 6));
-
-    // cout << "   " << styrta.getElem() << endl;
-    // cout << styrta.getElem(styrta.getLeft(0)) << " " << styrta.getElem(styrta.getRight(0)) << endl;
-
-    // string ordered[5];
-
-    cout << styrta.pop()->getContent() << endl;
-    cout << styrta.pop()->getContent() << endl;
-    cout << styrta.pop()->getContent() << endl;
-    cout << styrta.pop()->getContent() << endl;
-    cout << styrta.pop()->getContent() << endl;
-    cout << styrta.pop()->getContent() << endl;
-    cout << styrta.pop()->getContent() << endl;
-
-
-
+    Demonstration();
+    // ja.sendMessage(on);
+    // on.readMessage();
 
     return 0;
 }
