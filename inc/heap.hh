@@ -26,15 +26,9 @@ public:
         ptr_to_array = new std::shared_ptr<Packet<generic>>[size]; //this new returns a pointer to an array of pointers to Packet objects.
     }
 
-    /* Destruktor. Kasuje zaalokowaną tablice
-
-    */
-    ~MinHeap()
-    {
-        std::cerr << "MinHeap Destructor called\n";
-        delete[] ptr_to_array;   
-    }
-
+    /* Destruktor. Kasuje zaalokowaną tablice */
+    ~MinHeap() {delete[] ptr_to_array;}
+    
     /* Returns index of right child node. */
     int getRight(int i) { return (2*i + 2); }
 
@@ -57,6 +51,7 @@ public:
         while (elem_ind != 0 && (*(ptr_to_array + getParent(elem_ind)))->getPriority() > (*(ptr_to_array + elem_ind))->getPriority())
         {
             //Zamien elementy miejscami a potem zajmij sie rodzicem
+            //Jako że tablica na której heap jest zbudowany przetrzymuje wskaźniki a nie całe dane, jedyne co się zamienia miejscami to wskaźniki na pakiety.
             std::swap( *(ptr_to_array + getParent(elem_ind)), *(ptr_to_array + elem_ind) );
             elem_ind = getParent(elem_ind);
         }
@@ -74,9 +69,9 @@ public:
             return *(ptr_to_array);
         }
 
-        std::shared_ptr<Packet<generic>> top_copy = getElem();
-        *(ptr_to_array) = *(ptr_to_array + (num_of_elements-1) ); //overwriting the top element
-        num_of_elements--; //"deleting" the last element
+        std::shared_ptr<Packet<generic>> top_copy = getElem();  //zachowuje pierwszy element ze stosu, który zostanie zwrócony.
+        *(ptr_to_array) = *(ptr_to_array + (num_of_elements-1) );  //Nadpisuje pierwszy element elementem, który jest ostatni w tablicy
+        num_of_elements--; //"usuwa" ostatni element. W rzeczysistości skurcza o 1 zmienną śledzącą liczbe elementów. W praktyce ten wskaźnik nadal tam tkwi
         sortHeap(0);
         std::cout << num_of_elements;  
         return top_copy; 
@@ -84,11 +79,10 @@ public:
 
     void sortHeap(int parent_index)
     {
-        /* TERMINATION CONDITION START */
+        /*--- TERMINATION CONDITION START ---*/
         //termination conditions:
         //  if both children are bigger than parent OR
         //  if parent has no children (index of left child would be greater than num_of_elems-1)
-
         if ( getRight(parent_index) <= num_of_elements-1 ) //if both children exist (right child will always have higher index than left)
         {
             //if the parent has the lowest value of priority compared to its children
@@ -100,9 +94,15 @@ public:
                  }   
         }
         else if ( getLeft(parent_index) > num_of_elements-1 ) {return;} //if parent has no children - tree is also sorted
+        /*--- TERMINATION CONDITION END ---*/
 
-        /* TERMINATION CONDITION END */
+        // TODO: dodaj sprawdzenie, czy dzieci istnieją.
 
+        /*Ustala indeks dziecka, z którym rodzic zostanie zamieniony,zakładając oczywiscie, ze z conajmniej jednym dzieckiem mozna dokonac zamiany.
+        To, czy isteje dziecko, z którym można wykonać zamiany jest sprawdzane przez blok Termination Condition.
+        Algorytm wyboru dziecka do zamiany z rodzicem jest prosty:
+            Jeżeli pryjorytet lewego dziecka jest mniejszy niż rodzica, indeks elementu do zamiany z rodzicem jest równy indeksowi lewego dziecka.
+            Jeżeli prawe dziecko ma pryjorytet mniejszy niż lewe dziecko, indeks elementu do zamiany z rodzicem jest równy indeksowi prawego dziecka  */
         int smallest_ind = parent_index;
         if ( (*(ptr_to_array+getLeft(parent_index)))->getPriority() < (*(ptr_to_array+parent_index))->getPriority())
         {
@@ -112,7 +112,10 @@ public:
         {
             smallest_ind = getRight(parent_index);
         }
+
+        //dokonanie zamiany elementów w tablicy. Elementami tablicy są wskaźniki na Pakiet, więc zamienieniu miejscami ulegną tylko te wskaźniki.
         std::swap( *(ptr_to_array+smallest_ind), *(ptr_to_array+parent_index) );
+        //Rekurencyjne wywołanie tego samego algorytmu dla rodzica, którego zastąpiliśmy dzieckiem (rodzic przechodzi niżej, a dziecko wyżej)
         sortHeap(smallest_ind);
     }
 

@@ -10,12 +10,6 @@ int main()
 {
     using namespace std;
 
-    // Packet<string> elem1("A", 0);
-    // Packet<string> elem1("grammatical", 1);
-    // Packet<string> elem1("unit", 2);
-    // Packet<string> elem1("that", 3);
-    // Packet<string> elem1("is", 4);
-
     MinHeap<string> styrta(10);
 
     styrta.addElem(Packet<string>("is", 4));
