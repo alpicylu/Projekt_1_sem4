@@ -23,14 +23,15 @@ public:
 
     void generateMessage(int num_of_chars);
 
-    void sendMessage(Person& address, bool read_scramble=false);
+    void sendMessage(Person& address);
 
     void recieveMessage(const Packet<std::string>* message, int mess_size);
 
     void readMessage()
     {
         std::cout << "Uporządkowana wiadomość: ";
-        std::cout << recieved_mess << std::endl;}
+        std::cout << recieved_mess << std::endl << std::endl;
+    }
 };
 
 

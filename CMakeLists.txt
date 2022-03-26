@@ -8,7 +8,7 @@ project(Projekt_1)
 #set(CMAKE_CXX_FLAGS "-g")
 
 #creates a variable called SOURCES that contains all paths to files listed after it. In our case those are source and inc files
-set(SOURCES src/main.cpp inc/heap.hh inc/packet.hh inc/person.hh src/person.cpp)
+set(SOURCES src/main.cpp inc/heap.hh inc/packet.hh inc/person.hh src/person.cpp inc/debug.hh)
 
 #creates an executable based on the name of the project and given sources
 add_executable(${PROJECT_NAME} ${SOURCES})

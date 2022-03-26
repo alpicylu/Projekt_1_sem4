@@ -8,26 +8,31 @@
 #include "heap.hh"
 #include "person.hh"
 
+
 void Demonstration()
 {
     using namespace std;
-    string demo_message = "Once upon a time in a kingdom far, far away, the king and queen were blessed with a beautiful baby girl.";
-
-    Person Jan("Jan", demo_message);
+    string demo_message = "Koń jaki jest, każdy widzi";
+    Person Jan("Jan");
     Person Anna("Anna");
+    
+    Jan.setMessage(demo_message);
+    Jan.sendMessage(Anna);
+    Anna.readMessage();
 
-    Jan.sendMessage(Anna, true);
+    demo_message = "Once upon a time in a kingdom far, far away, the king and queen were blessed with a beautiful baby girl.";
+    Jan.setMessage(demo_message);
+    Jan.sendMessage(Anna);
+    Anna.readMessage();
+
+    Jan.generateMessage(100);
+    Jan.sendMessage(Anna);
     Anna.readMessage();
 }
 
 int main()
 {
-    using namespace std;
-    
-
     Demonstration();
-    // ja.sendMessage(on);
-    // on.readMessage();
 
     return 0;
 }

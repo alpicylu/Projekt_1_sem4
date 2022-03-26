@@ -8,6 +8,7 @@
 
 #include "person.hh"
 #include "heap.hh"
+#include "debug.hh"
 
 void Person::generateMessage(int num_of_chars)
 {
@@ -22,20 +23,28 @@ void Person::generateMessage(int num_of_chars)
         rc = 'a' + seed%26;
         random_mess = random_mess + rc;
     }
+    if (dbgopt::DEBUG)
+    {
+        cout << "Wygenerowana wiadomość:  ";
+        cout << random_mess;
+        cout << endl;
+    }
     message_to_send = random_mess;
 }
 
 void Person::recieveMessage(const Packet<std::string>* message, int mess_size)
 {
- 
-    // for (int i=0; i<mess_size; i++)
-    // {
-    //     std::cout << message[i].getContent();
-    // }
-    // std::cout << std::endl;
+    if (dbgopt::DEBUG)
+    {
+        std::cout << "'Zmieszana' wiadomość:   ";
+        for (int i=0; i<mess_size; i++)
+        {
+            std::cout << message[i].getContent();
+        }
+        std::cout << std::endl;
+    }
   
     std::string out_str = "";
-
     MinHeap<std::string> sterta(mess_size);
     for (int i=0; i<mess_size; i++)
     {
@@ -49,7 +58,7 @@ void Person::recieveMessage(const Packet<std::string>* message, int mess_size)
     recieved_mess = out_str;
 }
 
-void Person::sendMessage(Person& address, bool read_scramble)
+void Person::sendMessage(Person& address)
 {
     // TODO: dodaj error check na wysylanie pustej wiadomosci
     int mess_len = message_to_send.length();  //ilosc znakow w wiadomosci
@@ -69,17 +78,5 @@ void Person::sendMessage(Person& address, bool read_scramble)
     }
     std::shuffle(packet_arr, packet_arr + num_of_packets, std::default_random_engine(seed));
 
-    if (read_scramble)
-    {
-        std::cout << "'Zmieszana' wiadomość:   ";
-        for (int i=0; i<num_of_packets; i++)
-        {
-            std::cout << packet_arr[i].getContent();
-        }
-        std::cout << std::endl;
-    }
-
-
     address.recieveMessage(packet_arr, num_of_packets);
-
 }

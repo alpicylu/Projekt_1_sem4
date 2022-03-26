@@ -43,10 +43,22 @@ public:
           const Packet<generic>& new_elem - referencja na obiekt typu Packet, który ma zostać dodany do sterty*/
     void addElem(const Packet<generic>& new_elem)
     {
+        if (num_of_elements+1 > size_of_array)
+        {
+            // std::cout << "Expander called" << std::endl;
+            std::shared_ptr<Packet<generic>>* new_arr = new std::shared_ptr<Packet<generic>>[size_of_array*2];
+            for (int i=0; i<num_of_elements; i++)
+            {
+                *(new_arr + i) = *(ptr_to_array + i);
+            }
+            delete[] ptr_to_array;
+            ptr_to_array = new_arr;
+        }
+
         num_of_elements++;
         int elem_ind = num_of_elements-1;
         *(ptr_to_array + elem_ind) = std::make_shared<Packet<generic>>(new_elem); //czy to na pewno nie miesza mi jakoś z oryginalną tablica/zmienną
-        //TODO: dodaj check na przekroczenie rozmiaru tablicy
+        //TODO: dodaj check na przekroczenie rozmiaru tablicy. Przekroczenie rozmiaru tablicy spowoduje podwojenie jej rozmiaru
 
         //1. gdy i==0, to w stercie jest tylko 1 element, wiec juz jest posortowana.
         //2. Jako ze to jest minheap, pryjorytet rodzica MUSI być MNIEJSZY niż pryjorytet dziecka

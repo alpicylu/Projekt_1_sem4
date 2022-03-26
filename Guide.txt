@@ -49,6 +49,14 @@ Problemy:
     modified. So, just use const and/or make a copy of that passed array inside your runction
 
 
+How to increase the heap-array size:
+    create a new array, or in our case a pointer to an array
+    copy all elements from the old one to the new one
+    delete the old one
+
+Nasza sterta rodzi sie i ginie w metodzie recieveMessage klasy Person. Zwiększenie rozmiaru tablicy na której stoi Sterta jest więc w tym przypadku zbędne,
+bo za każdym razem gdy zostaje uruchomiona metoda recieveMessage, tworzona jest nowa sterta.
+
 
 Decyzje, z kótrych będe musiał się tłumaczyć:
 1. dlaczego klasa Packet przechowuje treść zamiast wskaźnik do niej (generic content zamiast generic* content)
