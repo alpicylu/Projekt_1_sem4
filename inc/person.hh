@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include "packet.hh"
+#include "heap.hh"
 
 
 class Person
@@ -12,6 +13,7 @@ private:
     std::string name;
     std::string message_to_send; //original, unaltered and ordered message 
     std::string recieved_mess;
+    MinHeap<std::string> sterta;
 
 public:
 
@@ -34,5 +36,9 @@ public:
     }
 };
 
+
+/* Nie podoba mi się do końca, że aby zmienić początkowy rozmiar tablicy na której stoi sterta trzeba zmienić wartość zmiennej w default constructor
+w headerze heap.hh. Spróbuj zamiast starty jako atrybutu klasy dać niezainicjalizowany wskaźnik na stertę. W kostruktorze klasy Person zaś
+zdereferujesz ten wskaźnik i przypiszesz mu sterte o chcianej pojemnośći */
 
 #endif

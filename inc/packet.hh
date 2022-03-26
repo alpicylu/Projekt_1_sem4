@@ -13,6 +13,7 @@ private:
 
 public:
 
+    //Do i need to add something here? used in Person::sendMessage()
     Packet() {}
 
     Packet(generic cntnt, int prty)

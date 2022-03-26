@@ -1,18 +1,16 @@
 
-
-
 #include <iostream>
 #include <string>
 #include <memory>
-#include "packet.hh"
-#include "heap.hh"
-#include "person.hh"
-
+// #include "packet.hh"
+#include "person.hh"  //person includes packet and heap
+// #include "heap.hh"
 
 void Demonstration()
 {
     using namespace std;
-    string demo_message = "Koń jaki jest, każdy widzi";
+    string demo_message = "Once upon a time in a kingdom far, far away, the king and queen were blessed with a beautiful baby girl.";
+    // demo_message = "";
     Person Jan("Jan");
     Person Anna("Anna");
     
@@ -20,7 +18,7 @@ void Demonstration()
     Jan.sendMessage(Anna);
     Anna.readMessage();
 
-    demo_message = "Once upon a time in a kingdom far, far away, the king and queen were blessed with a beautiful baby girl.";
+    demo_message = "Koń jaki jest, każdy widzi.";
     Jan.setMessage(demo_message);
     Jan.sendMessage(Anna);
     Anna.readMessage();
@@ -32,15 +30,19 @@ void Demonstration()
 
 int main()
 {
-    Demonstration();
+    // Demonstration();
+
+    MinHeap<std::string> sterta(3);
+    sterta.addElem(Packet<std::string>("a", 1));
+
+    // std::cout << sterta.getElem()->getContent();
+    // std::cout << sterta.getElem()->getContent();
+    // std::cout << sterta.getElem()->getContent();
+
 
     return 0;
 }
 
 /*
-TODO: 
-    add ifndefs to prevent multiple includes.
-    Rozwiązanie problemu z template classes: zdefiniuj wszystko w .hh
-    References& https://www.geeksforgeeks.org/return-by-reference-in-c-with-examples/
-    ogarnij importy zeby uniknąć konfliktów - nie importuj 2x tej samej biblioteki
+TODO: Add peak() to heap
 */

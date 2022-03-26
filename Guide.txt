@@ -57,6 +57,11 @@ How to increase the heap-array size:
 Nasza sterta rodzi sie i ginie w metodzie recieveMessage klasy Person. Zwiększenie rozmiaru tablicy na której stoi Sterta jest więc w tym przypadku zbędne,
 bo za każdym razem gdy zostaje uruchomiona metoda recieveMessage, tworzona jest nowa sterta.
 
+How to implement one heap per object, because it currently creates a new heap each time a message is recieved (on recieveMessage() funciton call) making the copying
+of heap contents redundant, since the heap exists only as long as the function recieveMessage() lives:
+    - Have the storing Heap be a member of Person class AND/OR
+    - Pass a previously defined heap as a function argument when calling sendMessage() (sendMessage() also calls recieveMessage())
+
 
 Decyzje, z kótrych będe musiał się tłumaczyć:
 1. dlaczego klasa Packet przechowuje treść zamiast wskaźnik do niej (generic content zamiast generic* content)
