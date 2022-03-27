@@ -22,7 +22,7 @@ public:
     */
     MinHeap()
     {
-        size_of_array = 2; //Niska początkowa pojemnośc aby pokazać funkcjonalność rozszerzania.
+        size_of_array = 4; //Zupełnie arbitralna wartość. Niska początkowa pojemnośc aby pokazać funkcjonalność rozszerzania.
         num_of_elements = 0;
         ptr_to_array = new std::shared_ptr<Packet<generic>>[size_of_array];
     }
@@ -48,14 +48,22 @@ public:
     //
     /*metoda resetująca zmienną świadczącą o ilośći elementów na stosie. Używana, gdy użytkownik otrzyma nową wiadomość.
     Nieporządane jest, aby poprzednia wiadomość wpływała na aktualną*/
-    void reset() {num_of_elements=0;}
+    inline void reset() {num_of_elements=0;}
 
-    int getCapacity() {return size_of_array;}
+    inline int getCapacity() {return size_of_array;}
+
+    inline int size() {return num_of_elements;}
+
+    inline bool isEmpty()
+    {
+        if (num_of_elements <= 0) {return true;}
+        return false;
+    }
 
     /*Dodaje element pilnujac tym samym aby została zachowana własność sterty minimalnej - rodzic mniejszy od dziecka
         IN:
           const Packet<generic>& new_elem - referencja na obiekt typu Packet, który ma zostać dodany do sterty*/
-    void addElem(const Packet<generic>& new_elem)
+    void enqueue(const Packet<generic>& new_elem)
     {
         //Jeżeli następny element, który chcemy teraz wprowadzić przekroczy rozmiar tablicy na której Heap jest zbudowany:
         if (num_of_elements+1 > size_of_array)
@@ -95,12 +103,12 @@ public:
         }
     }
 
-    std::shared_ptr<Packet<generic>> pop() //retrieves and deletes the first element
+    std::shared_ptr<const Packet<generic>> dequeue() //retrieves and deletes the first element
     {
         if (num_of_elements <= 0)
         {
             std::cerr << "MinHeap::dequeue() - Cannot dequeue elements from empty heap\n";
-            exit(2);
+            exit(1);
         } 
         else if (num_of_elements == 1) 
         {
@@ -108,7 +116,9 @@ public:
             return *(ptr_to_array);
         }
 
-        std::shared_ptr<Packet<generic>> top_copy = getElem();  //zachowuje pierwszy element ze stosu, który zostanie zwrócony.
+        //the choice between the two following lines depends on your implementation of peek() - whether it returns a packet or a pointer to it.
+        std::shared_ptr<const Packet<generic>> top_copy = front();  //zachowuje pierwszy element ze stosu, który zostanie zwrócony.
+        // std::shared_ptr<Packet<generic>> top_copy = std::make_shared<Packet<generic>>(front());
         *(ptr_to_array) = *(ptr_to_array + (num_of_elements-1) );  //Nadpisuje pierwszy element elementem, który jest ostatni w tablicy
         num_of_elements--; //"usuwa" ostatni element. W rzeczysistości skurcza o 1 zmienną śledzącą liczbe elementów. W praktyce ten wskaźnik nadal tam tkwi
         sortHeap(0);
@@ -134,6 +144,7 @@ public:
 
         /*One child case. Only possible when the parent node is on the penultimate layer of the tree. if child is smaller than parent
         swapping them will be the last needed swap to sort the tree.*/
+        /*Big Note: The "One heap per message" version does not check for this condition. !!!!!!!!!!!!!!!!!!!!!!1*/
         else if ( getLeft(parent_index) <= num_of_elements-1 && getRight(parent_index) > num_of_elements-1 ) 
         {
             /*Powód, dla którego ten warunek został wprowadzony jest następujący: Mogła zaistnieć sytuacja, w której rodzic posiada tylko jedno dziecko.
@@ -178,10 +189,26 @@ public:
         sortHeap(smallest_ind);
     }
  
-    std::shared_ptr<Packet<generic>> getElem() const
-    {
+    std::shared_ptr<const Packet<generic>> front()
+    {                                            
         return *(ptr_to_array);
     }
+
+    /*Im quite tired at this point.     Wait, does it actually copy the object? does it waste memory in this sense?
+    this new front/peek/whatever returns a copy of the top-packet. The good thing about this solution is that i dont need to worry about accidentally
+    modifying the returned object in an outside function. Bad thing is, it probably wastes some memory thanks to the fact that is possiblly copies the top packet. 
+    A better solution would be to return a shared_ptr<const Packet<generic>> and modify the pop() method accordingly
+    
+    Honestly, i dont know if all those consts are "fit" my implementation. 
+    for later: reconsider if peek/front should return a copy of the packet (in which case const-ing it is redundant since its a copy, but wastes memory since its a copy), 
+    or a pointer to const, which uses less memory, since we are returning just a pointer to an object, but i need to plaster "const" in a couple of places which im
+    not sure its a good idea.
+    
+    After like 10 seconds of consideration, it would make more sense to return a pointer to const or a const pointer, since heap stores pointers to packets, 
+    not packets themselves
+    The whole premise of "peak" is just to see what the top element is like, it should not permit any modification to the orginal structure(s)
+    
+    the following morning i decided to go with pointer to const*/
 };
 
 

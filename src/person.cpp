@@ -54,20 +54,20 @@ void Person::recieveMessage(const Packet<std::string>* message, int mess_size)
     //Dodanie elementów do kolejki pryjorytetowej
     for (int i=0; i<mess_size; i++)
     {
-        sterta.addElem(message[i]);
+        sterta.enqueue(message[i]);
     }
     //Wyjęcie tych elementów zgodnie z pryjorytetem.
     for (int i=0; i<mess_size; i++)
     {
-        out_str = out_str + sterta.pop()->getContent();
+        out_str = out_str + sterta.dequeue()->getContent();
     }
     recieved_mess = out_str;
 }
 
-void Person::sendMessage(Person& address)
+void Person::sendMessage(Person& address, int size_of_packet)
 {
     int mess_len = message_to_send.length();  //ilosc znakow w wiadomosci
-    int packet_size = 5; //ilość znaków w jednym pakiecie
+    int packet_size = size_of_packet; //ilość znaków w jednym pakiecie
     /* powodem użycia float w środku funkcji ceil jest fakt, że najczęściej wiadomość nie zostanie podzielona na pakiety o założonej długośći
     t.j. - najczęśćiej pojawi się jeden, ostatni pakiet, który będzie miał długość krótszą niż zakładana długość pakietu.
     dla przykładu: jeżeli rozmiar pakietu wynosi 2, a otrzymana wiadomość ma 5 znaków, zostanie utworzone 3 pakiety, trzeci o długośći 1. */

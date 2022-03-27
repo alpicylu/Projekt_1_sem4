@@ -4,7 +4,7 @@
 
 namespace dbgopt
 {
-    inline const bool DEBUG = true;
+    inline const bool DEBUG = false;
     inline const bool PRESENTATION_MODE = true;
 }
 

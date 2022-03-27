@@ -28,9 +28,13 @@ public:
         priority = pckt.getPriority();
     }
 
-    generic getContent() const { return content; }
+    inline generic getContent() const { return content; }
 
-    int getPriority() const { return priority; }
+    inline int getPriority() const { return priority; }
+
+    inline void setPriority(int p) {priority = p;}
+    inline void setContent(generic c) {content = c;}
+
 };
 
 template <class generic>
