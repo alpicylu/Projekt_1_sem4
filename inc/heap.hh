@@ -69,7 +69,7 @@ public:
         if (num_of_elements+1 > size_of_array)
         {
             size_of_array *= 2;  //strategia podwajania rozmiaru tablicy za każdym razem.
-            if (dbgopt::PRESENTATION_MODE) {std::cout << "Rozszerzacz włączony, aktualny rozmiar sterty (pakiety): " << size_of_array << std::endl;}
+            if (dbgopt::EXTENDER) {std::cout << "Rozszerzacz włączony, aktualny rozmiar sterty (pakiety): " << size_of_array << std::endl;}
             /*generowany jest nowy wskaźnik na tablice wskaźników na pakiety o nowym, powiększonym rozmiarze (tablica ma większy rozmiar, nie wskaźnik)*/
             std::shared_ptr<Packet<generic>>* new_arr = new std::shared_ptr<Packet<generic>>[size_of_array];
             for (int i=0; i<num_of_elements; i++)
@@ -131,6 +131,7 @@ public:
         //termination conditions:
         //  if both children are bigger than parent OR
         //  if parent has no children (index of left child would be greater than num_of_elems-1)
+        //  if parent has only one child, meaning that the parent resides on the penultimate layer of the tree
         if ( getRight(parent_index) <= num_of_elements-1 ) //if both children exist (right child will always have higher index than left)
         {
             //if the parent has the lowest value of priority compared to its children
@@ -149,8 +150,8 @@ public:
         {
             /*Powód, dla którego ten warunek został wprowadzony jest następujący: Mogła zaistnieć sytuacja, w której rodzic posiada tylko jedno dziecko.
             Zakładając poprawną (bez-dziurową) strukture drzewa sterty, to dzecko było by zawsze lewe.
-            Dzięki temu if'owi funkcja nie sprawdzi pryjorytetu dziecka, którego nie ma w przypadku, gdy rodzic posiada tylko lewe dziecko 
-            (w rzeczywistości to dziecko istnieje, tylko indeks maksymalny tablicy-sterty jest zmniejszany)*/
+            Dzięki temu if'owi funkcja nie sprawdzi pryjorytetu dziecka, którego nie ma w przypadku, gdy rodzic posiada tylko lewe dziecko (nie sprawdzi nieistniejącego
+            prawego dziecka). W rzeczywistości to dziecko istnieje, tylko indeks maksymalny tablicy-sterty jest zmniejszany.*/
             if ((*(ptr_to_array+getLeft(parent_index)))->getPriority() < (*(ptr_to_array+parent_index))->getPriority())
             {
                 if (dbgopt::DEBUG) {std::cerr << "One-child case\n";}
@@ -160,25 +161,18 @@ public:
         }
         /*--- TERMINATION CONDITION END ---*/
 
-        // TODO: dodaj sprawdzenie, czy dzieci istnieją. (a case for only one child) - ZAIMPLEMENTOWANO, USUŃ
-        // Co sie stanie jak rodzic ma tylko jedno dziecko? są dwie opcjie:
-        //  1. dziecko jest większe od rodzica - zostaw wszystko na miejscu
-        //  2. dziecko jest mniejsze of rodzica - zamien dziecko i rodzica miejscem
-        //Pomimo braku tego sprawdzenia i testach, kod zdaje się dizałać.
-        //Jeżeli rodzic ma tylko jedno dziecko, to jest to dziecko lewe, bo struktura pełnego drzewa jest zachowana.
-
         /*Ustala indeks dziecka, z którym rodzic zostanie zamieniony,zakładając oczywiscie, ze z conajmniej jednym dzieckiem mozna dokonac zamiany
         i rodzic ma oboje dzieci. Reszta przypadków jest sprawdzana w Bloku Terminacyjnym. 
         To, czy isteje dziecko, z którym można wykonać zamiany jest sprawdzane przez blok Termination Condition.
         Algorytm wyboru dziecka do zamiany z rodzicem jest prosty:
             Jeżeli pryjorytet lewego dziecka jest mniejszy niż rodzica, indeks elementu do zamiany z rodzicem jest równy indeksowi lewego dziecka.
-            Jeżeli prawe dziecko ma pryjorytet mniejszy niż lewe dziecko, indeks elementu do zamiany z rodzicem jest równy indeksowi prawego dziecka  */
+            Jeżeli prawe dziecko ma pryjorytet równy/mniejszy niż lewe dziecko, indeks elementu do zamiany z rodzicem jest równy indeksowi prawego dziecka  */
         int smallest_ind = parent_index;
         if ( (*(ptr_to_array+getLeft(parent_index)))->getPriority() < (*(ptr_to_array+parent_index))->getPriority())
         {
             smallest_ind = getLeft(parent_index);
         }
-        if ( (*(ptr_to_array+getRight(parent_index)))->getPriority() < (*(ptr_to_array+getLeft(parent_index)))->getPriority())
+        if ( (*(ptr_to_array+getRight(parent_index)))->getPriority() <= (*(ptr_to_array+getLeft(parent_index)))->getPriority())
         {
             smallest_ind = getRight(parent_index);
         }
